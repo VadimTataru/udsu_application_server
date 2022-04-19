@@ -12,8 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestWebAPI.Database;
 using TestWebAPI.Models;
+using TestWebAPI.Models.CountriesData;
+using TestWebAPI.Models.CovidData;
 using TestWebAPI.Repositories;
+using TestWebAPI.Repositories.CountryRepository;
+using TestWebAPI.Repositories.CovidDataRepository;
 
 namespace TestWebAPI
 {
@@ -33,9 +38,12 @@ namespace TestWebAPI
 
             //Регистранция экземпляра BookRepository. Так же гарантирует, что у нас будет один экземпляр для http запроса
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ICovidDataRepository, CovidDataRepository>();
 
             //Добавляем контекст базы данных (прослойка между БД и апи)
             services.AddDbContext<BookContext>(o => o.UseSqlite("Data source=book.db"));
+            services.AddDbContext<ApplicationContext>(o => o.UseSqlite("Data source=appdata.db"));
 
             services.AddSwaggerGen(c =>
             {

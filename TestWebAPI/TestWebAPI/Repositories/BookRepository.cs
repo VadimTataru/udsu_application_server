@@ -38,6 +38,11 @@ namespace TestWebAPI.Repositories
             return await _context.Books.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Book>> Get(string title)
+        {
+            return await _context.Books.FromSqlInterpolated($"SELECT * FROM Books WHERE Books.Title = {title}").ToListAsync();
+        }
+
         public async Task Update(Book book)
         {
             _context.Entry(book).State = EntityState.Modified;

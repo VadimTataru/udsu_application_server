@@ -24,10 +24,10 @@ namespace TestWebAPI.Controllers
             return await _bookRepository.Get();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBooks(int id)
+        [HttpGet("{title}")]
+        public async Task<IEnumerable<Book>> GetBooks(string title)
         {
-            return await _bookRepository.Get(id);
+            return await _bookRepository.Get(title);
         }
 
         [HttpPost]
