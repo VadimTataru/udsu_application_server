@@ -8,7 +8,7 @@ namespace TestWebAPI.Repositories.CountryRepository
     {
         Task<IEnumerable<CountryData>> Get();
         Task<IEnumerable<CountryData>> Get(string country);
-        Task<CountryData> Create(CountryData countryData);
+        Task<List<CountryData>> Create(List<CountryData> countryData);
         Task Update(CountryData countryData);
         Task Delete(int id);
     }
