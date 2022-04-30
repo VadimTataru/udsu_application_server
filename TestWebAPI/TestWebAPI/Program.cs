@@ -28,3 +28,4 @@ namespace TestWebAPI
 
 //api.covid19api.com/countries to get country names
 //api.covid19api.com/country/{country_name} to get data by country name
+//api.covid19api.com/country/{country_name}?from=YYYY-mm-ddT00:00:00Z&to=YYYY-mm-ddT00:00:00Z to get data by country name
