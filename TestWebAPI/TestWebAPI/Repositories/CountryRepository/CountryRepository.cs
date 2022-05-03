@@ -51,16 +51,6 @@ namespace TestWebAPI.Repositories.CountryRepository
             return await _context.Countries.ToListAsync();
         }
 
-        public async Task<IEnumerable<CountryData>> Get(string countryName)
-        {
-            var data = _context.Countries.FromSqlInterpolated($"SELECT * FROM Countries WHERE Countries.CountryName = {countryName}").ToListAsync();
-            if (data == null)
-            {
-
-            }
-            return await _context.Countries.FromSqlInterpolated($"SELECT * FROM Countries WHERE Countries.CountryName = {countryName}").ToListAsync();
-        }
-
         public async Task Update(CountryData countryData)
         {
             _context.Entry(countryData).State = EntityState.Modified;

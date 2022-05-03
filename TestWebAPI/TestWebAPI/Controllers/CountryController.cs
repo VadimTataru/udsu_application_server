@@ -25,11 +25,5 @@ namespace TestWebAPI.Controllers
         {
             return await _countryRepository.Get();
         }
-
-        [HttpGet("{country}")]
-        public async Task<IEnumerable<CountryData>> GetCountry(string country)
-        {
-            return await _countryRepository.Get(country);
-        }
     }
 }

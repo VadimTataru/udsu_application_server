@@ -37,6 +37,11 @@ namespace TestWebAPI.Repositories.CovidDataRepository
             return await _context.CovidDatas.FromSqlRaw($"SELECT * FROM CovidDatas WHERE CovidDatas.CountryName = {country}").ToListAsync();
         }
 
+        public async Task<IEnumerable<CovidData>> GetWithData(string data_from, string data_to)
+        {
+            return await _context.CovidDatas.FromSqlRaw($"SELECT * FROM CovidDatas WHERE CovidDatas.Date BETWEEN {data_from} AND {data_to} ").ToListAsync();
+        }
+
         public async Task Update(CovidData data)
         {
             _context.Entry(data).State = EntityState.Modified;
