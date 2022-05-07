@@ -35,7 +35,7 @@ namespace TestWebAPI.Repositories.CountryRepository
 
         public async Task<IEnumerable<CountryData>> Get()
         {
-            List<CountryData> data = await _context.Countries.FromSqlRaw($"SELECT * FROM Countries").ToListAsync();
+            List<CountryData> data = await _context.Countries.FromSqlRaw($"SELECT * FROM Countries").OrderBy(c=>c.CountryName).ToListAsync();
             if (!data.Any())
             {
                 //запрос к сторонней апи
