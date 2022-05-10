@@ -1,31 +1,28 @@
-﻿using System;
-using System.IO;
-using System.Net;
-
-namespace TestWebAPI.ThirdPartyCoivdAPI
+﻿namespace TestWebAPI.ThirdPartyCoivdAPI
 {
     public class GetRequest
     {
-        HttpWebRequest request;
-        string adressUrl;
+        string addressUrl;
 
-        public string Response { get; set; }
+        public string? responseData { get; set; }
 
-        public GetRequest(string adressUrl)
+        public GetRequest(string addressUrl)
         {
-            this.adressUrl = adressUrl;
+            this.addressUrl = addressUrl;
         }
 
-        public void Run()
+        public async void Run()
         {
-            request = (HttpWebRequest)WebRequest.Create(adressUrl);
-            request.Method = "GET";
+            var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
 
             try
             {
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                var stream = response.GetResponseStream();
-                if(stream != null) Response = new StreamReader(stream).ReadToEnd();
+                var response = await client.GetAsync(addressUrl);
+                var streamResponse = await response.Content.ReadAsStringAsync();
+                if (streamResponse != null)
+                {
+                    responseData = new StreamReader(streamResponse).ReadToEnd();
+                }
             }
             catch(Exception)
             {

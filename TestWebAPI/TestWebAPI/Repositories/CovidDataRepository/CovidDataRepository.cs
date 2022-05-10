@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using TestWebAPI.Database;
 using TestWebAPI.Models.CovidData;
 using TestWebAPI.ThirdPartyCoivdAPI;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace TestWebAPI.Repositories.CovidDataRepository
 {
@@ -28,8 +24,11 @@ namespace TestWebAPI.Repositories.CovidDataRepository
         public async Task Delete(int id)
         {
             var dataToDelete = await _context.CovidDatas.FindAsync(id);
-            _context.CovidDatas.Remove(dataToDelete);
-            await _context.SaveChangesAsync();
+            if (dataToDelete != null)
+            {
+                _context.CovidDatas.Remove(dataToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<CovidData>> Get()
@@ -51,14 +50,14 @@ namespace TestWebAPI.Repositories.CovidDataRepository
             {
                 string from = date_from.ToString("yyyy-MM-ddTHH:mm:ssZ");
                 string to = date_to.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                List<CovidData> result_data = CallGetRequest(country, from, to);
+                List<CovidData>? result_data = CallGetRequest(country, from, to);
 
                 if (dataFromDB.Count > 0)
                 {
-                    result_data = result_data.Except(dataFromDB).ToList();
+                    result_data = result_data?.Except(dataFromDB).ToList();
                 }
 
-                if(result_data.Count > 0)
+                if(result_data?.Count > 0)
                 {
                     await Create(result_data);
                     return await GetWithDate(country, date_from, date_to);
@@ -73,14 +72,18 @@ namespace TestWebAPI.Repositories.CovidDataRepository
             await _context.SaveChangesAsync();
         }
 
-        private List<CovidData> CallGetRequest(string country, string from, string to)
+        private List<CovidData>? CallGetRequest(string country, string from, string to)
         {
             var request = new GetRequest($"https://api.covid19api.com/country/{country}?from={from}&to={to}");
             request.Run();
-            var response = request.Response;
-            var json = JArray.Parse(response);
-            List<CovidData> data = JsonConvert.DeserializeObject<List<CovidData>>(json.ToString());
-            return data;
+            var response = request.responseData;
+            if (response != null)
+            {
+                var json = JArray.Parse(response);
+                List<CovidData>? data = JsonConvert.DeserializeObject<List<CovidData>>(json.ToString());
+                return data;
+            }
+            return null;
         }
 
         private List<CovidData> GetResultList(List<CovidData> fromThirdAPI, List<CovidData> fromDB)

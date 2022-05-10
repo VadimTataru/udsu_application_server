@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TestWebAPI.Models.CovidData;
+﻿using TestWebAPI.Models.CovidData;
 
 namespace TestWebAPI.Repositories.CovidDataRepository
 {

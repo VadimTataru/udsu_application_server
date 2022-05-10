@@ -6,11 +6,10 @@ namespace TestWebAPI.Database
 {
     public class ApplicationContext: DbContext
     {
-        public DbSet<CountryData> Countries { get; set; }
-        public DbSet<CovidData> CovidDatas { get; set; }
+        public DbSet<CountryData> Countries { get; set; } = null!;
+        public DbSet<CovidData> CovidDatas { get; set; } = null!;
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -19,6 +18,5 @@ namespace TestWebAPI.Database
             modelBuilder.Entity<CountryData>().HasKey(c => new { c.Id });
             modelBuilder.Entity<CovidData>().HasKey(cov => new { cov.Date, cov.CountryName });
         }
-
     }
 }
