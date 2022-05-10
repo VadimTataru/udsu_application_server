@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TestWebAPI.Models.CovidData;
 
@@ -8,8 +9,8 @@ namespace TestWebAPI.Repositories.CovidDataRepository
     {
         Task<IEnumerable<CovidData>> Get();
         Task<IEnumerable<CovidData>> Get(string country);
-        Task<IEnumerable<CovidData>> GetWithData(string data_from, string data_to);
-        Task<CovidData> Create(CovidData data);
+        Task<IEnumerable<CovidData>> GetWithDate(string country, DateTime date_from, DateTime date_to);
+        Task<List<CovidData>> Create(List<CovidData> data);
         Task Update(CovidData data);
         Task Delete(int id);
     }

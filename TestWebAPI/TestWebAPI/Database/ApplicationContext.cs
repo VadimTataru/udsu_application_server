@@ -10,7 +10,7 @@ namespace TestWebAPI.Database
         public DbSet<CovidData> CovidDatas { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
