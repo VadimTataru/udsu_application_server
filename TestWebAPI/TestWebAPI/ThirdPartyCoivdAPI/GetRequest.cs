@@ -1,4 +1,9 @@
-﻿namespace TestWebAPI.ThirdPartyCoivdAPI
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using TestWebAPI.Models.CountriesData;
+using TestWebAPI.Models.CovidData;
+
+namespace TestWebAPI.ThirdPartyCoivdAPI
 {
     public class GetRequest
     {
@@ -11,22 +16,19 @@
             this.addressUrl = addressUrl;
         }
 
-        public async void Run()
+        public async Task<string> Run()
         {
             var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
 
             try
             {
                 var response = await client.GetAsync(addressUrl);
-                var streamResponse = await response.Content.ReadAsStringAsync();
-                if (streamResponse != null)
-                {
-                    responseData = new StreamReader(streamResponse).ReadToEnd();
-                }
+                var responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
             }
             catch(Exception)
             {
-
+                return null;
             }
         }
     }

@@ -38,9 +38,8 @@ namespace TestWebAPI.Repositories.CountryRepository
             if (!data.Any())
             {
                 //запрос к сторонней апи
-                var request = new GetRequest("https://api.covid19api.com/countries");
-                request.Run();
-                var response = request.responseData;
+                var request = new GetRequest("https://api.covid19api.com/countries");                
+                var response = await request.Run();
 
                 if (response != null)
                 {
@@ -54,7 +53,7 @@ namespace TestWebAPI.Repositories.CountryRepository
                     }
                 }
             }
-            return await _context.Countries.ToListAsync();
+            return await _context.Countries.OrderBy(c => c.CountryName).ToListAsync();
         }
 
         public async Task Update(CountryData countryData)

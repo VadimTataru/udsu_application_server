@@ -50,7 +50,7 @@ namespace TestWebAPI.Repositories.CovidDataRepository
             {
                 string from = date_from.ToString("yyyy-MM-ddTHH:mm:ssZ");
                 string to = date_to.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                List<CovidData>? result_data = CallGetRequest(country, from, to);
+                List<CovidData>? result_data = await CallGetRequest(country, from, to);
 
                 if (dataFromDB.Count > 0)
                 {
@@ -72,11 +72,10 @@ namespace TestWebAPI.Repositories.CovidDataRepository
             await _context.SaveChangesAsync();
         }
 
-        private List<CovidData>? CallGetRequest(string country, string from, string to)
+        private async Task<List<CovidData>?> CallGetRequest(string country, string from, string to)
         {
             var request = new GetRequest($"https://api.covid19api.com/country/{country}?from={from}&to={to}");
-            request.Run();
-            var response = request.responseData;
+            var response = await request.Run();
             if (response != null)
             {
                 var json = JArray.Parse(response);
@@ -84,12 +83,6 @@ namespace TestWebAPI.Repositories.CovidDataRepository
                 return data;
             }
             return null;
-        }
-
-        private List<CovidData> GetResultList(List<CovidData> fromThirdAPI, List<CovidData> fromDB)
-        {
-            List<CovidData> resultList = fromThirdAPI.Except(fromDB).ToList();
-            return resultList;
         }
     }
 }

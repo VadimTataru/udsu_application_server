@@ -1,6 +1,26 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model TestWebAPI.Pages.IndexModel
 @{
+    ViewData["Title"] = "Home Page";
 }
 
 <h1>Start page</h1>
+
+<form method="post" asp-antiforgery="true">
+    <p>
+        <input type="date" asp-for=requestData.date_from />
+
+        <input type="date" asp-for=requestData.date_to />
+    </p>
+    <p>
+        <select asp-for="requestData.Country">
+            <option>Choose country please...</option>
+                @foreach(var country in Model.Countries)
+                {
+                    <option>@country.CountryName</option>
+                }
+         </select>
+    </p>    
+    <input type="submit" value="Отправить" />
+</form>
