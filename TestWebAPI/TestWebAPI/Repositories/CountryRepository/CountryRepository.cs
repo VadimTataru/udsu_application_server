@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TestWebAPI.Database;
-using TestWebAPI.Models;
 using TestWebAPI.Models.CountriesData;
 using TestWebAPI.ThirdPartyCoivdAPI;
 
@@ -29,8 +25,11 @@ namespace TestWebAPI.Repositories.CountryRepository
         public async Task Delete(int id)
         {
             var countryToDelete = await _context.Countries.FindAsync(id);
-            _context.Countries.Remove(countryToDelete);
-            await _context.SaveChangesAsync();
+            if (countryToDelete != null)
+            {
+                _context.Countries.Remove(countryToDelete);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<CountryData>> Get()
@@ -41,12 +40,19 @@ namespace TestWebAPI.Repositories.CountryRepository
                 //запрос к сторонней апи
                 var request = new GetRequest("https://api.covid19api.com/countries");
                 request.Run();
-                var response = request.Response;
-                var json = JArray.Parse(response);
-                List<CountryData> countryList = JsonConvert.DeserializeObject<List<CountryData>>(json.ToString());
+                var response = request.responseData;
 
-                await Create(countryList);                
-                await Get();
+                if (response != null)
+                {
+                    var json = JArray.Parse(response);
+                    List<CountryData>? countryList = JsonConvert.DeserializeObject<List<CountryData>>(json.ToString());
+
+                    if (countryList?.Count > 0)
+                    {
+                        await Create(countryList);
+                        await Get();
+                    }
+                }
             }
             return await _context.Countries.ToListAsync();
         }

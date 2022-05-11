@@ -1,29 +1,38 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using TestWebAPI.Database;
+using TestWebAPI.Repositories.CountryRepository;
+using TestWebAPI.Repositories.CovidDataRepository;
 
-namespace TestWebAPI
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<ICovidDataRepository, CovidDataRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+
+builder.Services.AddDbContext<ApplicationContext>(o => o.UseSqlite("Data source=appdata.db"));
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CovidDataAPI v1"));
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapRazorPages();
+app.MapControllers();
+
+app.Run();
 
 
 //api.covid19api.com/countries to get country names

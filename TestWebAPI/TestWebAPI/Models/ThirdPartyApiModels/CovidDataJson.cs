@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace TestWebAPI.Models.ThirdPartyApiModels
 {
@@ -15,5 +14,14 @@ namespace TestWebAPI.Models.ThirdPartyApiModels
         public int Recovered { get; set; }
         [JsonProperty("Deaths")]
         public int Deaths { get; set; }
+
+        public CovidDataJson(string countryName, DateTime date, int confirmed, int recoverd, int deaths)
+        {
+            CountryName = countryName;
+            Date = date;
+            Confirmed = confirmed;
+            Recovered = recoverd;
+            Deaths = deaths;
+        }
     }
 }
