@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TestWebAPI.Models.CountriesData;
+using TestWebAPI.Models.ThirdPartyApiModels;
 using TestWebAPI.ThirdPartyCoivdAPI;
 
 namespace TestWebAPI.Pages
@@ -13,8 +14,8 @@ namespace TestWebAPI.Pages
 
         [BindProperty]
         public RequestData requestData { get; set; } = new RequestData("", DateTime.MinValue, DateTime.MaxValue);
-        public List<CountryData>? Countries { get; private set; }
-        public async void OnGet()
+        public List<CountryDataJson>? Countries { get; private set; }
+        public async Task OnGet()
         {
             Countries = await GetCountryData();
         }
@@ -24,7 +25,7 @@ namespace TestWebAPI.Pages
             //GetCovidData(requestData.Country, requestData.date_from, requestData.date_to);
         }        
 
-        public async Task<List<CountryData>> GetCountryData()
+        public async Task<List<CountryDataJson>> GetCountryData()
         {
             var request = new GetRequest("https://localhost:5001/api/country");            
             var response = await request.Run();
@@ -32,7 +33,7 @@ namespace TestWebAPI.Pages
             if (response != null)
             {
                 var json = JArray.Parse(response);
-                Countries = JsonConvert.DeserializeObject<List<CountryData>>(json.ToString());
+                Countries = JsonConvert.DeserializeObject<List<CountryDataJson>>(json.ToString());
                 return Countries;
             }
             return null;

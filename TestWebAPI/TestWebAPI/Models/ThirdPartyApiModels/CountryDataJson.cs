@@ -4,7 +4,7 @@ namespace TestWebAPI.Models.ThirdPartyApiModels
 {
     public class CountryDataJson
     {
-        [JsonProperty("Country")]
+        [JsonProperty("CountryName")]
         public string Name { get; set; }
         [JsonProperty("Slug")]
         public string Slug { get; set; }

@@ -16,10 +16,13 @@
     <p>
         <select asp-for="requestData.Country">
             <option>Choose country please...</option>
-                @foreach(var country in Model.Countries)
+            @if(Model.Countries != null)
+            {
+                foreach(var country in Model.Countries)
                 {
-                    <option>@country.CountryName</option>
+                    <option>@country.Name</option>
                 }
+            }
          </select>
     </p>    
     <input type="submit" value="Отправить" />
