@@ -4,11 +4,11 @@ namespace TestWebAPI.Models.ThirdPartyApiModels
 {
     public class CovidDataJson
     {
-        [JsonProperty("Country")]
+        [JsonProperty("CountryName")]
         public string CountryName { get; set; }
         [JsonProperty("Date")]
         public DateTime Date { get; set; }
-        [JsonProperty("Confirmed")]
+        [JsonProperty("Confirm")]
         public int Confirmed { get; set; }
         [JsonProperty("Recovered")]
         public int Recovered { get; set; }

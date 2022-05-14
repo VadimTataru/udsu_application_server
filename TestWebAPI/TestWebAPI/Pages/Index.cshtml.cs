@@ -11,18 +11,34 @@ namespace TestWebAPI.Pages
     public class IndexModel : PageModel
     {
         public record class RequestData(string Country, DateTime date_from, DateTime date_to);
-
+        #region var args
         [BindProperty]
         public RequestData requestData { get; set; } = new RequestData("", DateTime.MinValue, DateTime.MaxValue);
         public List<CountryDataJson>? Countries { get; private set; }
+        public List<CovidDataJson>? CovidDatas { get; private set;}
+        public string[] Labels { get; private set; } = { "" };
+        public string Country { get; private set; } = "";
+        public int[] Confirmed { get; private set; } = new int[] { 0 };
+        public int[] Recovered { get; private set; } = new int[] { 0 };
+        public int[] Deaths { get; private set; } = new int[] { 0 };
+        public List<string> DateLabels { get; private set; } = new List<string>();
+        //public List<int> Confirmed { get; private set; } = new List<int>();
+        //public List<int> Recovered { get; private set; } = new List<int>();
+        //public List<int> Deaths { get; private set; } = new List<int>();
+        public DateTime maxDate_to { get; } = DateTime.Now;
+        public DateTime maxDate_from { get; set; } = DateTime.Now.AddDays(-2);
+        public DateTime minDate { get; } = new DateTime(2020, 1, 22);
+        public string Mess { get; set; } = "";
+        #endregion
         public async Task OnGet()
         {
             Countries = await GetCountryData();
         }
 
-        public void OnPost()
+        public async Task OnPost()
         {
-            //GetCovidData(requestData.Country, requestData.date_from, requestData.date_to);
+            CovidDatas = await GetCovidData(requestData.Country, requestData.date_from, requestData.date_to);
+            await OnGet();
         }        
 
         public async Task<List<CountryDataJson>> GetCountryData()
@@ -33,28 +49,37 @@ namespace TestWebAPI.Pages
             if (response != null)
             {
                 var json = JArray.Parse(response);
-                Countries = JsonConvert.DeserializeObject<List<CountryDataJson>>(json.ToString());
-                return Countries;
+                List<CountryDataJson>?  countries = JsonConvert.DeserializeObject<List<CountryDataJson>>(json.ToString());
+                return countries;
             }
             return null;
         }
 
-        //Example request url https://localhost:5001/api/CovidData?country=russia&date_from=2020-01-07&date_to=2020-03-29
-        //public async Task<List<CountryData>> GetCovidData(string country, DateTime from, DateTime to)
-        //{
-        //    string date_from = from.ToString("yyyy-MM-ddTHH:mm:ssZ");
-        //    string date_to = to.ToString("yyyy-MM-ddTHH:mm:ssZ");
-        //    var request = new GetRequest($"https://localhost:5001/api/CovidData?country={country}&date_from={date_from}&date_to={date_to}");
-            
-        //    var response = await request.Run();
+        public async Task<List<CovidDataJson>> GetCovidData(string country, DateTime from, DateTime to)
+        {
+            string date_from = from.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            string date_to = to.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            var request = new GetRequest($"https://localhost:5001/api/CovidData?country={country}&date_from={date_from}&date_to={date_to}");
 
-        //    if (response != null)
-        //    {
-        //        var json = JArray.Parse(response);
-        //        Countries = JsonConvert.DeserializeObject<List<CountryData>>(json.ToString());
-        //        return Countries;
-        //    }
-        //    return null;
-        //}
+            var response = await request.Run();
+
+            if (response != null)
+            {
+                var json = JArray.Parse(response);
+                List<CovidDataJson>? covidDatas = JsonConvert.DeserializeObject<List<CovidDataJson>>(json.ToString());
+
+                foreach(var cd in covidDatas)
+                {
+                    //Confirmed.Add(cd.Confirmed);
+                    //Recovered.Add(cd.Recovered);
+                    //Deaths.Add(cd.Deaths);
+                    DateLabels.Add(cd.Date.ToString("yyyy-MM-dd"));
+                }
+
+                Mess = covidDatas.Count.ToString();
+                return covidDatas;
+            }
+            return null;
+        }
     }
 }
