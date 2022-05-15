@@ -5,8 +5,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1>Start page</h1>
-
 <form method="post" asp-antiforgery="true">
     <p>
         <input type="date" min="@Model.minDate.ToString("yyyy-MM-dd")" max="@Model.maxDate_from.ToString("yyyy-MM-dd")" value="@Model.maxDate_from.ToString("yyyy-MM-dd")" asp-for=requestData.date_from />
@@ -28,89 +26,38 @@
     <input type="submit" value="Отправить" />
 </form>
 
-<p>@Model.Mess</p>
-
-<!-- <div id="MyChart"></div>
-
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script>
-    Highcharts.chart('MyChart', {
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: 'Covid-19 data.'
-        },
-        subtitle: {
-            text: 'According to the COIVD-19 API'
-        },
-        xAxis: {
-            reversed: false,
-            title: {
-                enabled: true,
-                text: 'Altitude'
-            },
-            labels: {
-                format: '{value} km'
-            },
-            accessibility: {
-                rangeDescription: 'Range: 0 to 80 km.'
-            },
-            maxPadding: 0.05,
-            showLastLabel: true
-        },
-        yAxis: {
-            title: {
-                text: 'Temperature'
-            },
-            labels: {
-                format: '{value}°'
-            },
-            accessibility: {
-                rangeDescription: 'Range: -90°C to 20°C.'
-            },
-            lineWidth: 2
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-            headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: '{point.x} km: {point.y}°C'
-        },
-        plotOptions: {
-            spline: {
-                marker: {
-                    enable: false
-                }
-            }
-        },
-        series: [{
-            name: 'Temperature',
-            data: [[0, 15], [10, -50], [20, -56.5], [30, -46.5], [40, -22.1],
-                [50, -2.5], [60, -27.7], [70, -55.7], [80, -76.5]]            
-        },
-        {
-            name: 'TestGraph2',
-            data: [[0, 10], [5, -50], [10, -9.5], [30, -46.5], [40, -22.1],
-                [50, -2.5], [6, -27.7], [60, -25.7], [50, -76.5]]
-        }]
-    });
-</script> -->
-
 <div>
+  <label>Данные о Covid-19 по стране - @Model.Country </label>
   <canvas id="myChart" width="60" height="30"></canvas>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>    
+<script>
+  var dateLabels = @Json.Serialize(@Model.DateLabels);
+  var confirmData = @Json.Serialize(@Model.Confirmed);
+  var recoveredData = @Json.Serialize(@Model.Recovered);
+  var dethsData = @Json.Serialize(@Model.Deaths);
+  console.log(dateLabels);
+
   const data = {
-    labels: ['yes', 'no'],
+    labels: dateLabels,
     datasets: [{
-      label: 'Confimed',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [1, 2],
+      label: 'Зарегистрировано случаев',
+      backgroundColor: 'rgb(73, 115, 222)',
+      borderColor: 'rgb(62, 89, 158)',
+      data: confirmData,
+    },
+    {
+      label: 'Вылечено',
+      backgroundColor: 'rgb(69, 217, 74)',
+      borderColor: 'rgb(51, 135, 54)',
+      data: recoveredData,
+    },
+    {
+      label: 'Кол-во умерших',
+      backgroundColor: 'rgb(217, 69, 69)',
+      borderColor: 'rgb(163, 59, 59)',
+      data: dethsData,
     }]
   };
 

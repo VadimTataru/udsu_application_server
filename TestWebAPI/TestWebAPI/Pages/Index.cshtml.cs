@@ -16,15 +16,11 @@ namespace TestWebAPI.Pages
         public RequestData requestData { get; set; } = new RequestData("", DateTime.MinValue, DateTime.MaxValue);
         public List<CountryDataJson>? Countries { get; private set; }
         public List<CovidDataJson>? CovidDatas { get; private set;}
-        public string[] Labels { get; private set; } = { "" };
         public string Country { get; private set; } = "";
-        public int[] Confirmed { get; private set; } = new int[] { 0 };
-        public int[] Recovered { get; private set; } = new int[] { 0 };
-        public int[] Deaths { get; private set; } = new int[] { 0 };
         public List<string> DateLabels { get; private set; } = new List<string>();
-        //public List<int> Confirmed { get; private set; } = new List<int>();
-        //public List<int> Recovered { get; private set; } = new List<int>();
-        //public List<int> Deaths { get; private set; } = new List<int>();
+        public List<int> Confirmed { get; private set; } = new List<int>();
+        public List<int> Recovered { get; private set; } = new List<int>();
+        public List<int> Deaths { get; private set; } = new List<int>();
         public DateTime maxDate_to { get; } = DateTime.Now;
         public DateTime maxDate_from { get; set; } = DateTime.Now.AddDays(-2);
         public DateTime minDate { get; } = new DateTime(2020, 1, 22);
@@ -70,12 +66,12 @@ namespace TestWebAPI.Pages
 
                 foreach(var cd in covidDatas)
                 {
-                    //Confirmed.Add(cd.Confirmed);
-                    //Recovered.Add(cd.Recovered);
-                    //Deaths.Add(cd.Deaths);
+                    Confirmed.Add(cd.Confirmed);
+                    Recovered.Add(cd.Recovered);
+                    Deaths.Add(cd.Deaths);
                     DateLabels.Add(cd.Date.ToString("yyyy-MM-dd"));
                 }
-
+                Country = country;
                 Mess = covidDatas.Count.ToString();
                 return covidDatas;
             }
