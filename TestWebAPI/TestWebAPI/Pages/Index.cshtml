@@ -2,7 +2,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model TestWebAPI.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Covid-19 LineChart";
 }
 
 <form method="post" asp-antiforgery="true">
@@ -26,7 +26,7 @@
     <input type="submit" value="Отправить" />
 </form>
 
-<div>
+<div id="chart_placeholder">
   <label>Данные о Covid-19 по стране - @Model.Country </label>
   <canvas id="myChart" width="60" height="30"></canvas>
 </div>
@@ -37,7 +37,6 @@
   var confirmData = @Json.Serialize(@Model.Confirmed);
   var recoveredData = @Json.Serialize(@Model.Recovered);
   var dethsData = @Json.Serialize(@Model.Deaths);
-  console.log(dateLabels);
 
   const data = {
     labels: dateLabels,

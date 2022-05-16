@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" asp-append-version="true"/>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="TestWebAPI.styles.css" asp-append-version="true"/>
+</head>
+<body>
+    <header>
+        <div>
+            <label>Covid-19 Out of Charts</label>
+        </div>
+    </header>
+    <div id="container">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <div id="container">
+            &copy; 2022 by Tataru Vadim
+        </div>
+    </footer>
+</body>
+</html>
