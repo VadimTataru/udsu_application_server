@@ -1,25 +1,87 @@
 ﻿#chart_placeholder {
-    max-height: 500px;
-    max-width: 600px;
     text-align: center;
-    text-shadow:inherit;
+    max-height: 500px;
+    max-width: 60%;
+    text-align: center;
+    text-shadow: inherit;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-content:center;
+    position:relative;
+    margin: auto;
+    margin-top: 10px;
 }
 
-input[type=date] {
+input {
     margin: 10px 0px;
     border: 0;
     border-bottom: 3px solid #eee;
-    box-shadow: 0 0 15px 4px rgb(0 0 0 / 6%);
+    box-shadow: 0 0 25px 4px rgb(0 0 0 / 6%);
     border-radius: 10px;
     width: 200px;
     height: 20px;
     padding: 10px;
     text-decoration-color: black;
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input:hover {
+    box-shadow: 0 0 15px 3px #0094ff;
+}
+
+button {
+    margin: 20px 0px;
+    cursor: pointer;
+    border: 0px;
+    border-bottom: 1px solid #cecece;
+    background: #ffffff;
+    box-shadow: 0 0 20px 4px rgb(0 0 0 / 6%);
+    border-radius: 8px;
+    padding: 8px 14px;
+    width: 200px;
+    height: 35px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button:hover {
+    box-shadow: 0 0 15px 3px #0094ff;
+    background: #fff;
+}
+
+
+button:active {
+    margin-top: 1px;
+    margin-bottom: -1px;
+    zoom: 1;
+}
+
+button:focus {
+    outline: none;
 }
 
 select {
-    width: 100%;
+    width: 25%;
     padding: 10px;
+    border: 0;
+    border-bottom: 3px, solid, #eee;
     border-radius: 10px;
+    box-shadow: 0 0 25px 4px rgb(0 0 0 / 6%);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+select:hover {
+    box-shadow: 0 0 15px 3px #0094ff;
+}
+
+p, label {
+    font-family: Gill Sans, sans-serif;
+    font-size: 2em;
+    text-align: center;
+    margin:auto;
+}
+
+footer{
+    position:fixed;
+    top:95%;
+}
+
+
