@@ -64,7 +64,7 @@ namespace TestWebAPI.Pages
                 var json = JArray.Parse(response);
                 List<CovidDataJson>? covidDatas = JsonConvert.DeserializeObject<List<CovidDataJson>>(json.ToString());
 
-                foreach(var cd in covidDatas)
+                foreach (var cd in covidDatas)
                 {
                     Confirmed.Add(cd.Confirmed);
                     Recovered.Add(cd.Recovered);
@@ -72,7 +72,6 @@ namespace TestWebAPI.Pages
                     DateLabels.Add(cd.Date.ToString("yyyy-MM-dd"));
                 }
                 Country = country;
-                Mess = covidDatas.Count.ToString();
                 return covidDatas;
             }
             return null;

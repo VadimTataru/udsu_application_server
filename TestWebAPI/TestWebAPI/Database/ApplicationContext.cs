@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TestWebAPI.Models;
 using TestWebAPI.Models.CountriesData;
 using TestWebAPI.Models.CovidData;
 
@@ -8,6 +9,7 @@ namespace TestWebAPI.Database
     {
         public DbSet<CountryData> Countries { get; set; } = null!;
         public DbSet<CovidData> CovidDatas { get; set; } = null!;
+        public DbSet<HistoricalCovidData> HistoricalCovidDatas { get; set; } = null!;
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             Database.EnsureCreated();
@@ -17,6 +19,7 @@ namespace TestWebAPI.Database
         {
             modelBuilder.Entity<CountryData>().HasKey(c => new { c.Id });
             modelBuilder.Entity<CovidData>().HasKey(cov => new { cov.Date, cov.CountryName });
+            modelBuilder.Entity<HistoricalCovidData>().HasKey(cov => new { cov.Date, cov.CountryName });
         }
     }
 }

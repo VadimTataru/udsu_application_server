@@ -23,6 +23,9 @@ namespace TestWebAPI.ThirdPartyCoivdAPI
             try
             {
                 var response = await client.GetAsync(addressUrl);
+                if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    return null;
+                
                 var responseData = await response.Content.ReadAsStringAsync();
                 return responseData;
             }

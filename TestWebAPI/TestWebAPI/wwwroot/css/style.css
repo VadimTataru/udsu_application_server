@@ -47,13 +47,6 @@ button:hover {
     background: #fff;
 }
 
-
-button:active {
-    margin-top: 1px;
-    margin-bottom: -1px;
-    zoom: 1;
-}
-
 button:focus {
     outline: none;
 }
