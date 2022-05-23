@@ -54,7 +54,7 @@ namespace TestWebAPI.Repositories.CovidDataRepository
         {
             int dateDuration = (int)(date_to - date_from).TotalDays + 1;
             List<CovidData> dataFromDB = await _context.CovidDatas.FromSqlRaw($"SELECT * FROM CovidDatas").Where(c => c.CountryName == country).Where(c => c.Date >= date_from).Where(c => c.Date <= date_to).OrderBy(c => c.Date).ToListAsync();
-
+            List<HistoricalCovidData> hisDataFromDB = await _context.HistoricalCovidDatas.FromSqlRaw($"SELECT * FROM CovidDatas").Where(c => c.CountryName == country).Where(c => c.Date >= date_from).Where(c => c.Date <= date_to).OrderBy(c => c.Date).ToListAsync();            
             if (dateDuration > dataFromDB.Count)
             {
                 string from = date_from.ToString("yyyy-MM-ddTHH:mm:ssZ");
@@ -72,6 +72,7 @@ namespace TestWebAPI.Repositories.CovidDataRepository
                 if (dataFromDB.Count > 0)
                 {
                     result_data = result_data?.Except(dataFromDB).ToList();
+                    historicalCovidDatas = historicalCovidDatas?.Except(hisDataFromDB).ToList();
                 }
 
                 if(result_data?.Count > 0)
@@ -79,38 +80,28 @@ namespace TestWebAPI.Repositories.CovidDataRepository
                     await CreateHistorical(historicalCovidDatas);
                     await Create(result_data);
 
-                    if (result_data.Min(d => d.Recovered) == 0 || result_data.Min(d => d.Confirm) == 0 || result_data.Min(d => d.Deaths) == 0)
-                        await Update(result_data);
-
                     return await GetWithDate(country, date_from, date_to);
                 }                
             }
+
+            if ((dataFromDB.Min(d => d.Recovered) == 0 || dataFromDB.Min(d => d.Confirm) == 0 || dataFromDB.Min(d => d.Deaths) == 0)
+                            && dataFromDB.Last().Recovered == 0)
+                dataFromDB = await Update(dataFromDB);
+
             return dataFromDB;
         }
 
-        public async Task Update(List<CovidData> data)
+        public async Task<List<CovidData>> Update(List<CovidData> data)
         {
             ModifyZeroData(data);
             foreach (var item in data)
                 _context.Entry(item).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return data;
         }
 
         private void ModifyZeroData(List<CovidData> data)
         {
-            //int maxConfirmed = data.Max(d => d.Confirm);
-            //int maxRecovered = data.Max(d => d.Recovered);
-            //int maxDeaths = data.Max(d => d.Deaths);
-
-            //foreach (var item in data)
-            //{
-            //    if (item.Confirm == 0) item.Confirm = maxConfirmed;
-
-            //    if (item.Recovered == 0) item.Recovered = maxRecovered;
-
-            //    if (item.Deaths == 0) item.Deaths = maxDeaths;
-            //}
-
             for (int i = 1; i < data.Count; i++)
             {
                 if (data[i].Confirm < data[i - 1].Confirm) data[i].Confirm = data[i - 1].Confirm;
@@ -118,19 +109,6 @@ namespace TestWebAPI.Repositories.CovidDataRepository
                 if (data[i].Deaths < data[i - 1].Deaths) data[i].Deaths = data[i - 1].Deaths;
             }            
         }
-
-        //private async Task<List<CovidData>?> CallGetRequest(string country, string from, string to)
-        //{
-        //    var request = new GetRequest($"https://api.covid19api.com/country/{country}?from={from}&to={to}");
-        //    var response = await request.Run();
-        //    if (response != null)
-        //    {
-        //        var json = JArray.Parse(response);
-        //        List<CovidData>? data = JsonConvert.DeserializeObject<List<CovidData>>(json.ToString());
-        //        return data;
-        //    }
-        //    return null;
-        //}
 
         private async Task<JArray> CallGetRequest(string country, string from, string to)
         {
