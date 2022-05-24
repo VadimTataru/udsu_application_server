@@ -65,7 +65,7 @@ select:hover {
     box-shadow: 0 0 15px 3px #0094ff;
 }
 
-p, label {
+p {
     font-family: Gill Sans, sans-serif;
     font-size: 2em;
     text-align: center;
@@ -77,4 +77,19 @@ footer{
     top:95%;
 }
 
+.text-application-name {
+    font-size: 2em;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin:auto;
+    text-align:center;
+    color: #336f72;
+}
+
+.text-chart-name {
+    font-size:1.3em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: auto;
+    text-align: center;
+    color: #336f72;
+}
 
