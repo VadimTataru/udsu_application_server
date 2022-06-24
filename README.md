@@ -3,6 +3,8 @@
 ##### Подготовка к работе приложения
 1. Должна быть установлена среда разработки Visual Studio 2022, так как приложение работает на платформе .net 6
    [Ссылка для загрузки VS 2022](https://visualstudio.microsoft.com/ru/vs/)
+   ИЛИ
+   [Ссылка для загрузки dotnet 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 2. Должен быть установлен Git для того, чтобы скачать репозиторий. (Не обязательно)
 3. Для того чтобы просмотреть данные в базе необходимо установить [DB Browser for SQLite](https://sqlitebrowser.org/dl/)
    
@@ -16,6 +18,10 @@
 3. Запустить приложение как TestWebAPI (не IIS Express)
 
 ![image](https://user-images.githubusercontent.com/64976256/168458054-87e84f01-89f3-42f1-a70d-dbf3cb536040.png)
+
+4. Второй способ открытия приложения: запустите утилиту Command Promt (win+r. В поле вводим cmd. Нажимаем Enter)
+Переходим в папку проекта, где лежит файл TestWebAPI.csproj
+Для запуска вводим команду ```dotnet run TestWebAPI``` 
 
 4. После того как приложение будет запущено, web-страница будет доступна по адресу `http://localhost:5001`.
 
