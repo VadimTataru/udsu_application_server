@@ -5,6 +5,7 @@ using TestWebAPI.Models.CovidData;
 using TestWebAPI.ThirdPartyCoivdAPI;
 using Newtonsoft.Json;
 using TestWebAPI.Models;
+using TestWebAPI.Models.CountriesData;
 
 namespace TestWebAPI.Repositories.CovidDataRepository
 {
@@ -53,6 +54,7 @@ namespace TestWebAPI.Repositories.CovidDataRepository
         public async Task<IEnumerable<CovidData>> GetWithDate(string country, DateTime date_from, DateTime date_to)
         {
             int dateDuration = (int)(date_to - date_from).TotalDays + 1;
+            //List<CountryData> countryData = await _context.Countries.FromSqlRaw($"SELECT Countries.ISO2 FROM Countries").Where(c => c.CountryName == country).ToListAsync();
             List<CovidData> dataFromDB = await _context.CovidDatas.FromSqlRaw($"SELECT * FROM CovidDatas").Where(c => c.CountryName == country).Where(c => c.Date >= date_from).Where(c => c.Date <= date_to).OrderBy(c => c.Date).ToListAsync();
             List<HistoricalCovidData> hisDataFromDB = await _context.HistoricalCovidDatas.FromSqlRaw($"SELECT * FROM CovidDatas").Where(c => c.CountryName == country).Where(c => c.Date >= date_from).Where(c => c.Date <= date_to).OrderBy(c => c.Date).ToListAsync();            
             if (dateDuration > dataFromDB.Count)
@@ -112,7 +114,9 @@ namespace TestWebAPI.Repositories.CovidDataRepository
 
         private async Task<JArray> CallGetRequest(string country, string from, string to)
         {
-            var request = new GetRequest($"https://api.covid19api.com/country/{country}?from={from}&to={to}");
+            Console.WriteLine(await _context.Countries.FromSqlRaw($"SELECT * FROM Countries where CountryName = '{country}'").ToListAsync());
+            List<CountryData> iso = await _context.Countries.FromSqlRaw($"SELECT * FROM Countries where CountryName = '{country}'").ToListAsync();
+            var request = new GetRequest($"https://api.covid19api.com/country/{iso[0].ISO2}?from={from}&to={to}");
             var response = await request.Run();
             if (response != null)
             {
